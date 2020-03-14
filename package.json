@@ -1,0 +1,19 @@
+{
+  "name": "qier-moving-notify",
+  "version": "1.0.0",
+  "description": "A moving notify",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:vortesnail/qier-moving-notify.git"
+  },
+  "author": {
+    "name": "vortesnail",
+    "url": "https://github.com/vortesnail",
+    "email": "1091331061@qq.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "echo 'skip test...'"
+  }
+}
