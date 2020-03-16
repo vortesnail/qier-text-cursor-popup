@@ -1,23 +1,3 @@
-function fuck(num, str): void {
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-  console.log(`不着好${num}`);
-}
+import plus from './plus';
 
-const arrow = (num) => {
-  return num;
-};
-
-fuck(1, 'ss');
+console.log(plus(404, 404, 404, 404, 404)); // => 2020

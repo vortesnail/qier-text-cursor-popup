@@ -98,6 +98,7 @@ module.exports = {
     'no-underscore-dangle': OFF,
     'no-unused-expressions': OFF,
     'no-useless-constructor': OFF,
+    curly: [2, 'multi-line'],
   },
   overrides: [
     {
