@@ -3,4 +3,5 @@
 /public
 /scripts
 /build
+/dist
 *.test.js

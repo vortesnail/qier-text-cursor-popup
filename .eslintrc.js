@@ -85,8 +85,8 @@ module.exports = {
     '@typescript-eslint/no-useless-constructor': ERROR,
 
     'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
-    'react/jsx-indent-props': [ERROR, 4],
-    'react/jsx-indent': [ERROR, 4],
+    'react/jsx-indent-props': [ERROR, 2],
+    'react/jsx-indent': [ERROR, 2],
 
     'func-names': OFF,
     'lines-between-class-members': OFF,

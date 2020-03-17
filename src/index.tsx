@@ -1,3 +1,3 @@
-import plus from './plus';
+import Hello from './Hello';
 
-console.log(plus(404, 404, 404, 404, 404)); // => 2020
+export default Hello;
