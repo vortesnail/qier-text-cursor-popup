@@ -11,6 +11,10 @@ module.exports = merge(common, {
   entry: {
     main: './example/App.tsx',
   },
+  output: {
+    path: path.resolve(__dirname, '../dist'),
+    filename: '[name].js',
+  },
   devServer: {
     contentBase: path.resolve(__dirname, '../dist'),
     open: true,
