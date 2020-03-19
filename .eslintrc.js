@@ -1,4 +1,5 @@
 const OFF = 0;
+const WARN = 1;
 const ERROR = 2;
 
 module.exports = {
@@ -33,17 +34,11 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'unicorn'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint', 'unicorn'],
   settings: {
     'import/resolver': {
       node: {
-        // 指定 eslint-plugin-import 解析的后缀名
         extensions: ['.ts', '.tsx', '.js', '.json'],
-      },
-      typescript: {
-        // 配置 eslint-import-resolver-typescript 读取 tsconfig.json 的路径
-        // 目前用不着，先注释掉
-        // directory: [resolve('./src/tsconfig.json'), resolve('./scripts/tsconfig.json')],
       },
     },
   },
@@ -83,11 +78,17 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': OFF,
     '@typescript-eslint/no-non-null-assertion': OFF,
     '@typescript-eslint/no-useless-constructor': ERROR,
+    '@typescript-eslint/interface-name-prefix': OFF,
 
     'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
     'react/jsx-indent-props': [ERROR, 2],
     'react/jsx-indent': [ERROR, 2],
+    'react/prop-types': OFF,
 
+    'react-hooks/rules-of-hooks': ERROR,
+    'react-hooks/exhaustive-deps': ERROR,
+
+    'jsx-quotes': [ERROR, "prefer-single"],
     'func-names': OFF,
     'lines-between-class-members': OFF,
     'max-classes-per-file': OFF,
@@ -98,7 +99,7 @@ module.exports = {
     'no-underscore-dangle': OFF,
     'no-unused-expressions': OFF,
     'no-useless-constructor': OFF,
-    curly: [2, 'multi-line'],
+    'curly': [2, 'multi-line'],
   },
   overrides: [
     {

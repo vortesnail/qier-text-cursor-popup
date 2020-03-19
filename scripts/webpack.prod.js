@@ -10,12 +10,12 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
-  entry: path.resolve(__dirname, '../src/index.tsx'),
+  entry: path.resolve(__dirname, '../src/index.ts'),
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: path.resolve(__dirname, '../'),
     filename: 'index.js',
-    library: ['qier-moving-notify'],
+    library: ['qier-text-cursor-popup'],
     libraryTarget: 'umd',
     globalObject: "typeof self !== 'undefined' ? self : this",
   },

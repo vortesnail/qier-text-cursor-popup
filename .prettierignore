@@ -1,0 +1,10 @@
+/config
+/node_modules
+/public
+/scripts
+/build
+/dist
+*.test.js
+.commitlintrc.js
+.eslintrc.js
+postcss.config.js
