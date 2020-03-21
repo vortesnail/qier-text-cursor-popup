@@ -55,6 +55,7 @@ module.exports = {
         js: 'never',
       },
     ],
+    'import/no-cycle': [OFF, { maxDepth: 1 }],
 
     'unicorn/prevent-abbreviations': OFF,
     'unicorn/filename-case': [
@@ -87,6 +88,9 @@ module.exports = {
 
     'react-hooks/rules-of-hooks': ERROR,
     'react-hooks/exhaustive-deps': ERROR,
+
+    'jsx-a11y/no-static-element-interactions': OFF,
+    'jsx-a11y/click-events-have-key-events': OFF,
 
     'jsx-quotes': [ERROR, "prefer-single"],
     'func-names': OFF,

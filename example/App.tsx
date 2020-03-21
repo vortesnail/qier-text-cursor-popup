@@ -3,4 +3,14 @@ import ReactDOM from 'react-dom';
 
 import QierTextCursorPopup from '../src';
 
-ReactDOM.render(<QierTextCursorPopup />, document.querySelector('#example'));
+const App = () => {
+  return (
+    <div className='App'>
+      <QierTextCursorPopup>
+        <input type='text' name='app-input' id='textareaId' />
+      </QierTextCursorPopup>
+    </div>
+  );
+};
+
+ReactDOM.render(<App />, document.querySelector('#example'));
