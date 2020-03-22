@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import NotifyPopup, { IUser } from './NotifyPopup';
 import { isArray } from './utils/util';
 import './QierTextCursorPopup.less';
@@ -73,42 +73,25 @@ interface IProps {
   render?: () => HTMLElement;
 }
 
-function getTextBoxEle(
-  element: React.ReactElement<any> | React.ReactElement<any>[],
-): React.ReactElement<HTMLInputElement | HTMLTextAreaElement> | null {
-  let ele = null;
-  if (isArray(element)) {
-    element = element as React.ReactElement<any>[];
-    element.forEach((item: React.ReactElement<any>) => {
-      if (item.type === 'input' || item.type === 'textarea') {
-        ele = item;
-      }
-    });
-  } else {
-    element = element as React.ReactElement<any>;
-    if (element.props.children !== undefined) {
-      ele = getTextBoxEle(element.props.children);
-    } else if (element.type === 'input' || element.type === 'textarea') {
-      ele = element;
-    }
-  }
-
-  return ele;
-}
-
 const QierTextCursorPopup: React.FC<IProps> = (props) => {
-  // const { defaultVisible } = props;
-  const children = props.children as React.ReactElement<any> | React.ReactElement<any>[];
-  const textBoxEle = getTextBoxEle(children);
+  const { defaultVisible, children } = props;
+  const [textBoxEle, setTextBoxEle] = useState<HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null>(null);
 
-  console.log(children);
-  console.log(textBoxEle);
+  useEffect(() => {
+    const parentEle = document.querySelector('#qier-text-cursor-popup')!.parentElement;
+    setTextBoxEle(() => {
+      if (parentEle && parentEle.querySelector('input')) {
+        return parentEle.querySelector('input');
+      }
+      return null;
+    });
+  }, [textBoxEle]);
 
   return (
     <>
-      {textBoxEle ? (
+      {usersList.length !== 0 ? (
         <div id='qier-text-cursor-popup'>
-          <NotifyPopup usersList={usersList} isTextAreaFocus />
+          <NotifyPopup usersList={usersList} isTextAreaFocus textBoxEle={textBoxEle} />
         </div>
       ) : (
         ''

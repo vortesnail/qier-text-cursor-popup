@@ -13,7 +13,6 @@ const App = () => {
       <QierTextCursorPopup>
         <div className='test'>
           {' '}
-          <div>sadasd</div>
           <input
             type='text'
             name='app-input'

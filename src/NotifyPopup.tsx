@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useHotKeys from './CustomHooks/useHotKeys';
 import './NotifyPopup.less';
 
 type TProps = {
   usersList: IUser[];
   isTextAreaFocus: boolean;
+  textBoxEle: HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null;
 };
 
 export interface IUser {
@@ -13,14 +14,18 @@ export interface IUser {
   readonly name?: string;
 }
 
-function handleUserSelect(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+function handleUserSelect(
+  e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  textBoxEle: HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null,
+) {
   e.stopPropagation();
   const nameEle = e.currentTarget.querySelector('#name');
-  console.log(nameEle?.textContent);
+  (textBoxEle as HTMLInputElement).value = `${(textBoxEle as HTMLInputElement).value + nameEle?.textContent} `;
+  textBoxEle?.focus();
 }
 
 const NotifyPopup: React.FC<TProps> = (props) => {
-  const { usersList = [], isTextAreaFocus } = props;
+  const { usersList = [], isTextAreaFocus, textBoxEle } = props;
   const [curUserId, setCurUserId] = useState<number | string>(usersList[0].id);
   let curUserIndex = 0;
 
@@ -47,6 +52,18 @@ const NotifyPopup: React.FC<TProps> = (props) => {
   useHotKeys('down', isTextAreaFocus, usersList, downForwardKey, []);
   useHotKeys('up', isTextAreaFocus, usersList, upForwardKey, []);
 
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const handleTextBoxChange = (e: any) => {
+    console.log(e.target.value);
+  };
+
+  useEffect(() => {
+    if (textBoxEle !== null) {
+      textBoxEle.addEventListener('input', handleTextBoxChange);
+    }
+    return () => textBoxEle?.removeEventListener('input', handleTextBoxChange);
+  }, [textBoxEle]);
+
   return (
     <div className={`qier-notify-popup ${isTextAreaFocus ? 'show' : ''}`}>
       <div className='popup'>
@@ -54,7 +71,9 @@ const NotifyPopup: React.FC<TProps> = (props) => {
           <div
             key={item.id}
             className={`user ${item.id === curUserId ? 'active' : ''}`}
-            onClick={handleUserSelect}
+            onClick={(e) => {
+              handleUserSelect(e, textBoxEle);
+            }}
           >
             <div className='avatar'>
               <img src={item.avatar} alt='avatar' />
