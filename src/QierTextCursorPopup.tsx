@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import NotifyPopup, { IUser } from './NotifyPopup';
+import { isArray } from './utils/util';
 import './QierTextCursorPopup.less';
 
 const usersList: IUser[] = [
@@ -72,14 +73,46 @@ interface IProps {
   render?: () => HTMLElement;
 }
 
+function getTextBoxEle(
+  element: React.ReactElement<any> | React.ReactElement<any>[],
+): React.ReactElement<HTMLInputElement | HTMLTextAreaElement> | null {
+  let ele = null;
+  if (isArray(element)) {
+    element = element as React.ReactElement<any>[];
+    element.forEach((item: React.ReactElement<any>) => {
+      if (item.type === 'input' || item.type === 'textarea') {
+        ele = item;
+      }
+    });
+  } else {
+    element = element as React.ReactElement<any>;
+    if (element.props.children !== undefined) {
+      ele = getTextBoxEle(element.props.children);
+    } else if (element.type === 'input' || element.type === 'textarea') {
+      ele = element;
+    }
+  }
+
+  return ele;
+}
+
 const QierTextCursorPopup: React.FC<IProps> = (props) => {
-  const { defaultVisible, children } = props;
+  // const { defaultVisible } = props;
+  const children = props.children as React.ReactElement<any> | React.ReactElement<any>[];
+  const textBoxEle = getTextBoxEle(children);
+
+  console.log(children);
+  console.log(textBoxEle);
 
   return (
     <>
-      <div id='qier-text-cursor-popup'>
-        <NotifyPopup usersList={usersList} isTextAreaFocus />
-      </div>
+      {textBoxEle ? (
+        <div id='qier-text-cursor-popup'>
+          <NotifyPopup usersList={usersList} isTextAreaFocus />
+        </div>
+      ) : (
+        ''
+      )}
       {children}
     </>
   );

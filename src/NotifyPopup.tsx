@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useHotKeys from './CustomHooks/useHotKeys';
 import './NotifyPopup.less';
 
@@ -13,9 +13,11 @@ export interface IUser {
   readonly name?: string;
 }
 
-const handleUserSelect = () => {
-  console.log(121);
-};
+function handleUserSelect(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  e.stopPropagation();
+  const nameEle = e.currentTarget.querySelector('#name');
+  console.log(nameEle?.textContent);
+}
 
 const NotifyPopup: React.FC<TProps> = (props) => {
   const { usersList = [], isTextAreaFocus } = props;
@@ -57,7 +59,9 @@ const NotifyPopup: React.FC<TProps> = (props) => {
             <div className='avatar'>
               <img src={item.avatar} alt='avatar' />
             </div>
-            <div className='name'>{item.name}</div>
+            <div className='name' id='name'>
+              {item.name}
+            </div>
           </div>
         ))}
       </div>

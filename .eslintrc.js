@@ -56,6 +56,7 @@ module.exports = {
       },
     ],
     'import/no-cycle': [OFF, { maxDepth: 1 }],
+    'import/prefer-default-export': OFF,
 
     'unicorn/prevent-abbreviations': OFF,
     'unicorn/filename-case': [
@@ -85,6 +86,7 @@ module.exports = {
     'react/jsx-indent-props': [ERROR, 2],
     'react/jsx-indent': [ERROR, 2],
     'react/prop-types': OFF,
+    'react/destructuring-assignment': OFF,
 
     'react-hooks/rules-of-hooks': ERROR,
     'react-hooks/exhaustive-deps': ERROR,

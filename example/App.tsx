@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-
 import QierTextCursorPopup from '../src';
 
+// function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+//   console.log(e.target);
+// }
+
 const App = () => {
+  // const inputRef = useRef(null);
   return (
     <div className='App'>
       <QierTextCursorPopup>
-        <input type='text' name='app-input' id='textareaId' />
+        <div className='test'>
+          {' '}
+          <div>sadasd</div>
+          <input
+            type='text'
+            name='app-input'
+            id='textareaId'
+            // ref={inputRef}
+            // onChange={handleInputChange}
+          />
+        </div>
       </QierTextCursorPopup>
     </div>
   );
