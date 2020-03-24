@@ -6,13 +6,13 @@ type CallbackFn = (event: KeyboardEvent) => void;
 
 export default function useHotkeys(
   keys: string,
-  isTextAreaFocus: boolean,
+  isTextBoxFocus: boolean,
   usersList: IUser[],
   callback: CallbackFn,
   deps: any[] = [],
 ) {
   useEffect(() => {
-    if (isTextAreaFocus && usersList.length !== 0) {
+    if (isTextBoxFocus && usersList.length !== 0) {
       hotkeys(keys, callback);
     }
 

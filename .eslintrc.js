@@ -17,9 +17,7 @@ module.exports = {
     'plugin:unicorn/recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
-    // 专门支持了 eslint-plugin-react
     'prettier/react',
-    // 专门支持了 @typescript-eslint/eslint-plugin
     'prettier/@typescript-eslint',
   ],
   globals: {

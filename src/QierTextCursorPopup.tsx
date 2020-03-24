@@ -1,101 +1,77 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NotifyPopup, { IUser } from './NotifyPopup';
-import { isArray } from './utils/util';
 import './QierTextCursorPopup.less';
 
-const usersList: IUser[] = [
-  {
-    id: 1,
-    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-    name: 'vortesnail',
-  },
-  {
-    id: 2,
-    avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-    name: '那你的哟',
-  },
-  {
-    id: 3,
-    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-    name: '我是一个小猫猫',
-  },
-  {
-    id: 4,
-    avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-    name: '我好痒哦哦哦',
-  },
-  {
-    id: 5,
-    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-    name: '叮叮当当的笑爷爷',
-  },
-  {
-    id: 6,
-    avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-    name: '自行车界离开家阿里事情',
-  },
-  {
-    id: 7,
-    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-    name: '互不干扰的生活',
-  },
-  {
-    id: 8,
-    avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-    name: '是吧',
-  },
-  {
-    id: 9,
-    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-    name: 'nananalala',
-  },
-  // {
-  //   avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-  //   name: '爱的供养',
-  // },
-  // {
-  //   avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-  //   name: '爱的供养',
-  // },
-  // {
-  //   avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-  //   name: '爱的供养',
-  // },
-];
-
 interface IProps {
-  defaultVisible?: boolean;
+  // defaultVisible?: boolean;
   visible?: boolean;
-  showDelay?: number;
-  disappearDelay?: number;
-  debounce?: boolean;
-  getPopupContainer?: (triggerNode: HTMLElement) => HTMLElement;
-  render?: () => HTMLElement;
+  // showDelay?: number;
+  // disappearDelay?: number;
+  // debounce?: boolean;
+  // getPopupContainer?: (triggerNode: HTMLElement) => HTMLElement;
+  usersList?: IUser[];
+  onSelectUser?: (selectedUser: IUser) => void;
+  render?: () => React.ReactNode;
 }
 
 const QierTextCursorPopup: React.FC<IProps> = (props) => {
-  const { defaultVisible, children } = props;
+  const { usersList, onSelectUser, render, children } = props;
   const [textBoxEle, setTextBoxEle] = useState<HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null>(null);
+  const [isTextBoxFocus, setIsTextBoxFocus] = useState<boolean>(false);
+
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const handleTextBoxFoucs = () => {
+    setIsTextBoxFocus(true);
+  };
+
+  const handleTextBoxBlur = () => {
+    setIsTextBoxFocus(false);
+  };
 
   useEffect(() => {
     const parentEle = document.querySelector('#qier-text-cursor-popup')!.parentElement;
     setTextBoxEle(() => {
-      if (parentEle && parentEle.querySelector('input')) {
-        return parentEle.querySelector('input');
+      if (parentEle) {
+        const textEle = parentEle.querySelector('input');
+        if (textEle) {
+          return textEle;
+        }
       }
       return null;
     });
   }, [textBoxEle]);
 
+  useEffect(() => {
+    textBoxEle?.addEventListener('focus', handleTextBoxFoucs);
+    textBoxEle?.addEventListener('blur', handleTextBoxBlur);
+
+    return () => {
+      textBoxEle?.removeEventListener('focus', handleTextBoxFoucs);
+      textBoxEle?.removeEventListener('blur', handleTextBoxBlur);
+    };
+  }, [textBoxEle]);
+
+  // if `render` is exist, the return ReactNode will be rendered instead of default popbox.
+  const getRednerNode = () => {
+    if (render) {
+      return render();
+    }
+    if (usersList && usersList.length !== 0) {
+      return (
+        <NotifyPopup
+          usersList={usersList}
+          onSelectUser={onSelectUser}
+          isTextBoxFocus={isTextBoxFocus}
+          textBoxEle={textBoxEle}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
-      {usersList.length !== 0 ? (
-        <div id='qier-text-cursor-popup'>
-          <NotifyPopup usersList={usersList} isTextAreaFocus textBoxEle={textBoxEle} />
-        </div>
-      ) : (
-        ''
-      )}
+      <div id='qier-text-cursor-popup'>{getRednerNode()}</div>
       {children}
     </>
   );
