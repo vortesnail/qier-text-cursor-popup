@@ -40,15 +40,12 @@ const NotifyPopup: React.FC<TProps> = (props) => {
     setCurUserId(usersList[curUserIndex].id);
   };
 
-  useHotKeys('down', isTextBoxFocus, usersList, downForwardKey, []);
-  useHotKeys('up', isTextBoxFocus, usersList, upForwardKey, []);
+  useHotKeys('down', isTextBoxFocus, usersList, downForwardKey, [isTextBoxFocus]);
+  useHotKeys('up', isTextBoxFocus, usersList, upForwardKey, [isTextBoxFocus]);
 
-  const handleUserSelect = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    textEle: HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null,
-  ) => {
+  const handleUserSelect = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    const id = e.currentTarget.getAttribute('data-key')!;
+    const id = e.currentTarget.getAttribute('data-id')!;
     const avatar = e.currentTarget.querySelector('#avatar')!.getAttribute('src') || '';
     const name = e.currentTarget.querySelector('#name')!.textContent || '';
     const selectedUser: IUser = {
@@ -60,7 +57,7 @@ const NotifyPopup: React.FC<TProps> = (props) => {
       onSelectUser(selectedUser);
     }
 
-    textEle?.focus();
+    textBoxEle?.focus();
   };
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
@@ -81,11 +78,9 @@ const NotifyPopup: React.FC<TProps> = (props) => {
         {usersList.map((item) => (
           <div
             key={item.id}
-            data-key={item.id}
+            data-id={item.id}
             className={`user ${item.id === curUserId ? 'active' : ''}`}
-            onClick={(e) => {
-              handleUserSelect(e, textBoxEle);
-            }}
+            onClick={handleUserSelect}
           >
             <div className='avatar'>
               <img src={item.avatar} id='avatar' alt='avatar' />

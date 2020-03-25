@@ -15,17 +15,19 @@ interface IProps {
 }
 
 const QierTextCursorPopup: React.FC<IProps> = (props) => {
-  const { usersList, onSelectUser, render, children } = props;
+  const { usersList = [], onSelectUser, render, children } = props;
   const [textBoxEle, setTextBoxEle] = useState<HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null>(null);
   const [isTextBoxFocus, setIsTextBoxFocus] = useState<boolean>(false);
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const handleTextBoxFoucs = () => {
     setIsTextBoxFocus(true);
   };
 
   const handleTextBoxBlur = () => {
-    setIsTextBoxFocus(false);
+    const timer = setTimeout(() => {
+      setIsTextBoxFocus(false);
+      clearTimeout(timer);
+    }, 10);
   };
 
   useEffect(() => {

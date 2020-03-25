@@ -12,11 +12,15 @@ export default function useHotkeys(
   deps: any[] = [],
 ) {
   useEffect(() => {
+    hotkeys.filter = ({ target }) => {
+      return (target as any).tagName === 'INPUT';
+    };
+
     if (isTextBoxFocus && usersList.length !== 0) {
       hotkeys(keys, callback);
     }
 
-    return () => hotkeys.unbind('down', callback);
+    return () => hotkeys.unbind(keys, callback);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }
