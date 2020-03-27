@@ -20,6 +20,14 @@ const NotifyPopup: React.FC<TProps> = (props) => {
   const [curUserId, setCurUserId] = useState<number | string>(usersList[0].id);
   let curUserIndex = 0;
 
+  const backToInitial = () => {
+    const timer = setTimeout(() => {
+      setCurUserId(usersList[0]?.id);
+      clearTimeout(timer);
+    }, 10);
+    textBoxEle?.focus();
+  };
+
   const downForwardKey = (e: KeyboardEvent): void => {
     e.preventDefault();
     if (curUserIndex === usersList.length - 1) {
@@ -40,8 +48,23 @@ const NotifyPopup: React.FC<TProps> = (props) => {
     setCurUserId(usersList[curUserIndex].id);
   };
 
+  const enterKey = (e: KeyboardEvent): void => {
+    e.preventDefault();
+    if (onSelectUser) {
+      const selectedUser: IUser = {
+        id: usersList[curUserIndex].id,
+        avatar: usersList[curUserIndex].avatar,
+        name: usersList[curUserIndex].name,
+      };
+      onSelectUser(selectedUser);
+    }
+
+    backToInitial();
+  };
+
   useHotKeys('down', isTextBoxFocus, usersList, downForwardKey, [isTextBoxFocus]);
   useHotKeys('up', isTextBoxFocus, usersList, upForwardKey, [isTextBoxFocus]);
+  useHotKeys('enter', isTextBoxFocus, usersList, enterKey, [isTextBoxFocus]);
 
   const handleUserSelect = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
@@ -57,12 +80,12 @@ const NotifyPopup: React.FC<TProps> = (props) => {
       onSelectUser(selectedUser);
     }
 
-    textBoxEle?.focus();
+    backToInitial();
   };
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const handleTextBoxChange = (e: any) => {
-    // console.log(e.target.value);
+    console.log(e.target.value);
   };
 
   useEffect(() => {

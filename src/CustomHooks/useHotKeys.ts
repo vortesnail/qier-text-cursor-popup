@@ -12,8 +12,9 @@ export default function useHotkeys(
   deps: any[] = [],
 ) {
   useEffect(() => {
-    hotkeys.filter = ({ target }) => {
-      return (target as any).tagName === 'INPUT';
+    hotkeys.filter = function(e) {
+      const { tagName } = (e.target as any) || (e.srcElement as any);
+      return tagName.isContentEditable || tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA';
     };
 
     if (isTextBoxFocus && usersList.length !== 0) {
