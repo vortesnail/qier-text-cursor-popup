@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { Input } from 'antd';
 import 'antd/dist/antd.css';
 import { IUser } from '../src/NotifyPopup';
-import QierTextCursorPopup from '../src';
+import QierTextCursorPopup, { getCursorPosition, insertStr } from '../src';
 
-const usersList = [
+const usersLists = [
   {
     id: 1,
     avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
@@ -66,13 +66,31 @@ const usersList = [
 ];
 
 const App = () => {
+  const [usersList, setUsersList] = useState<IUser[]>([]);
   const [value, setValue] = useState<any>('');
+  const [cursorPos, setCursorPos] = useState<number>(0);
 
   const onSelectUser = (selectedUser: IUser) => {
-    setValue((tempValue: any) => tempValue + selectedUser.name);
+    setValue((tempValue: string) => {
+      let resultStr = '';
+      if (selectedUser.name) {
+        resultStr = insertStr(tempValue, cursorPos, selectedUser.name);
+      } else {
+        resultStr = tempValue;
+      }
+      return resultStr;
+    });
+    setUsersList([]);
   };
 
   const onInputChange = (e: any) => {
+    const curPos = getCursorPosition(e.target);
+    if (e.target.value[curPos - 1] === '@') {
+      setUsersList(usersLists);
+    } else {
+      setUsersList([]);
+    }
+    setCursorPos(curPos);
     setValue(e.target.value);
   };
 
@@ -85,8 +103,9 @@ const App = () => {
             type='text'
             name='app-input'
             id='textareaId'
-            // ref={inputRef}
-            // onChange={handleInputChange}
+            value={value}
+            onChange={onInputChange}
+            ref={textElRef}
           /> */}
           <Input value={value} onChange={onInputChange} />
         </div>

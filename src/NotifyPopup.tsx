@@ -7,6 +7,7 @@ type TProps = {
   onSelectUser?: (selectedUser: IUser) => void;
   isTextBoxFocus: boolean;
   textBoxEle: HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null;
+  handleTextBoxFoucs: () => void;
 };
 
 export interface IUser {
@@ -17,15 +18,16 @@ export interface IUser {
 
 const NotifyPopup: React.FC<TProps> = (props) => {
   const { usersList = [], onSelectUser, isTextBoxFocus, textBoxEle } = props;
-  const [curUserId, setCurUserId] = useState<number | string>(usersList[0].id);
+  const [curUserId, setCurUserId] = useState<number | string | undefined>(usersList[0].id);
   let curUserIndex = 0;
 
   const backToInitial = () => {
+    curUserIndex = 0;
+    setCurUserId(usersList[curUserIndex]?.id);
     const timer = setTimeout(() => {
-      setCurUserId(usersList[0]?.id);
+      textBoxEle?.focus();
       clearTimeout(timer);
     }, 10);
-    textBoxEle?.focus();
   };
 
   const downForwardKey = (e: KeyboardEvent): void => {
@@ -50,16 +52,15 @@ const NotifyPopup: React.FC<TProps> = (props) => {
 
   const enterKey = (e: KeyboardEvent): void => {
     e.preventDefault();
+    const selectedUser: IUser = {
+      id: usersList[curUserIndex].id,
+      avatar: usersList[curUserIndex].avatar,
+      name: usersList[curUserIndex].name,
+    };
+    backToInitial();
     if (onSelectUser) {
-      const selectedUser: IUser = {
-        id: usersList[curUserIndex].id,
-        avatar: usersList[curUserIndex].avatar,
-        name: usersList[curUserIndex].name,
-      };
       onSelectUser(selectedUser);
     }
-
-    backToInitial();
   };
 
   useHotKeys('down', isTextBoxFocus, usersList, downForwardKey, [isTextBoxFocus]);
@@ -76,24 +77,11 @@ const NotifyPopup: React.FC<TProps> = (props) => {
       avatar,
       name,
     };
+    backToInitial();
     if (onSelectUser) {
       onSelectUser(selectedUser);
     }
-
-    backToInitial();
   };
-
-  // eslint-disable-next-line unicorn/consistent-function-scoping
-  const handleTextBoxChange = (e: any) => {
-    console.log(e.target.value);
-  };
-
-  useEffect(() => {
-    if (textBoxEle !== null) {
-      textBoxEle.addEventListener('input', handleTextBoxChange);
-    }
-    return () => textBoxEle?.removeEventListener('input', handleTextBoxChange);
-  }, [textBoxEle]);
 
   return (
     <div className={`qier-notify-popup ${isTextBoxFocus ? 'show' : ''}`}>
@@ -103,7 +91,7 @@ const NotifyPopup: React.FC<TProps> = (props) => {
             key={item.id}
             data-id={item.id}
             className={`user ${item.id === curUserId ? 'active' : ''}`}
-            onClick={handleUserSelect}
+            onMouseDown={handleUserSelect}
           >
             <div className='avatar'>
               <img src={item.avatar} id='avatar' alt='avatar' />

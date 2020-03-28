@@ -24,10 +24,12 @@ const QierTextCursorPopup: React.FC<IProps> = (props) => {
   };
 
   const handleTextBoxBlur = () => {
-    const timer = setTimeout(() => {
-      setIsTextBoxFocus(false);
-      clearTimeout(timer);
-    }, 10);
+    setIsTextBoxFocus(false);
+  };
+
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const handleTextBoxChange = (e: any) => {
+    console.log(e.target.value);
   };
 
   useEffect(() => {
@@ -46,10 +48,14 @@ const QierTextCursorPopup: React.FC<IProps> = (props) => {
   useEffect(() => {
     textBoxEle?.addEventListener('focus', handleTextBoxFoucs);
     textBoxEle?.addEventListener('blur', handleTextBoxBlur);
+    if (textBoxEle !== null) {
+      textBoxEle.addEventListener('input', handleTextBoxChange);
+    }
 
     return () => {
       textBoxEle?.removeEventListener('focus', handleTextBoxFoucs);
       textBoxEle?.removeEventListener('blur', handleTextBoxBlur);
+      textBoxEle?.removeEventListener('input', handleTextBoxChange);
     };
   }, [textBoxEle]);
 
@@ -58,6 +64,7 @@ const QierTextCursorPopup: React.FC<IProps> = (props) => {
     if (render) {
       return render();
     }
+
     if (usersList && usersList.length !== 0) {
       return (
         <NotifyPopup
@@ -65,9 +72,11 @@ const QierTextCursorPopup: React.FC<IProps> = (props) => {
           onSelectUser={onSelectUser}
           isTextBoxFocus={isTextBoxFocus}
           textBoxEle={textBoxEle}
+          handleTextBoxFoucs={handleTextBoxFoucs}
         />
       );
     }
+
     return null;
   };
 
