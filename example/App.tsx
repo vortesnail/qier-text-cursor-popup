@@ -99,14 +99,8 @@ const App = () => {
       <QierTextCursorPopup usersList={usersList} onSelectUser={onSelectUser}>
         <div className='test'>
           {' '}
-          {/* <input
-            type='text'
-            name='app-input'
-            id='textareaId'
-            value={value}
-            onChange={onInputChange}
-            ref={textElRef}
-          /> */}
+          {/* <textarea id='textareaId' value={value} onChange={onInputChange} /> */}
+          {/* <input type='text' name='app-input' id='textareaId' value={value} onChange={onInputChange} /> */}
           <Input value={value} onChange={onInputChange} />
         </div>
       </QierTextCursorPopup>

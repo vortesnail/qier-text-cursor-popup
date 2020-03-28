@@ -7,10 +7,13 @@ export function insertStr(soure: string, start: number, newStr: string) {
 }
 
 // get current cursor position, it returns a integer
-export function getCursorPosition(obj: HTMLInputElement | HTMLTextAreaElement) {
+export function getCursorPosition(obj: HTMLInputElement | HTMLTextAreaElement | HTMLDivElement) {
   let cursorIndex = 0;
-  if (obj.selectionStart || obj.selectionStart === 0) {
-    cursorIndex = obj.selectionStart;
+  if (obj.tagName === 'INPUT' || obj.tagName === 'TEXTAREA') {
+    cursorIndex = (obj as HTMLInputElement | HTMLTextAreaElement).selectionStart || 0;
+  }
+  if (obj.tagName === 'isContentEditable') {
+    // todo...
   }
   return cursorIndex;
 }

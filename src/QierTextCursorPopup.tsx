@@ -36,7 +36,7 @@ const QierTextCursorPopup: React.FC<IProps> = (props) => {
     const parentEle = document.querySelector('#qier-text-cursor-popup')!.parentElement;
     setTextBoxEle(() => {
       if (parentEle) {
-        const textEle = parentEle.querySelector('input');
+        const textEle = parentEle.querySelector('input') || parentEle.querySelector('textarea');
         if (textEle) {
           return textEle;
         }
@@ -72,7 +72,6 @@ const QierTextCursorPopup: React.FC<IProps> = (props) => {
           onSelectUser={onSelectUser}
           isTextBoxFocus={isTextBoxFocus}
           textBoxEle={textBoxEle}
-          handleTextBoxFoucs={handleTextBoxFoucs}
         />
       );
     }

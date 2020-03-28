@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useHotKeys from './CustomHooks/useHotKeys';
+import { getCursorPosition } from './utils/util';
 import './NotifyPopup.less';
 
 type TProps = {
@@ -7,7 +8,6 @@ type TProps = {
   onSelectUser?: (selectedUser: IUser) => void;
   isTextBoxFocus: boolean;
   textBoxEle: HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null;
-  handleTextBoxFoucs: () => void;
 };
 
 export interface IUser {
@@ -17,17 +17,35 @@ export interface IUser {
 }
 
 const NotifyPopup: React.FC<TProps> = (props) => {
-  const { usersList = [], onSelectUser, isTextBoxFocus, textBoxEle } = props;
+  const { usersList = [{ id: 0 }], onSelectUser, isTextBoxFocus, textBoxEle } = props;
   const [curUserId, setCurUserId] = useState<number | string | undefined>(usersList[0].id);
   let curUserIndex = 0;
 
-  const backToInitial = () => {
+  const returnUserAndCorrectCursor = (selectedUser: IUser) => {
+    let cursorPos = 0;
+    if (textBoxEle) {
+      cursorPos = getCursorPosition(textBoxEle) + selectedUser.name!.length;
+    }
+
     curUserIndex = 0;
     setCurUserId(usersList[curUserIndex]?.id);
     const timer = setTimeout(() => {
       textBoxEle?.focus();
       clearTimeout(timer);
     }, 10);
+
+    if (onSelectUser) {
+      onSelectUser(selectedUser);
+    }
+
+    if (textBoxEle) {
+      if (textBoxEle.tagName === 'INPUT' || textBoxEle.tagName === 'TEXTAREA') {
+        const timer2 = setTimeout(() => {
+          (textBoxEle as HTMLInputElement | HTMLTextAreaElement).setSelectionRange(cursorPos, cursorPos);
+          clearTimeout(timer2);
+        }, 10);
+      }
+    }
   };
 
   const downForwardKey = (e: KeyboardEvent): void => {
@@ -55,12 +73,9 @@ const NotifyPopup: React.FC<TProps> = (props) => {
     const selectedUser: IUser = {
       id: usersList[curUserIndex].id,
       avatar: usersList[curUserIndex].avatar,
-      name: usersList[curUserIndex].name,
+      name: `${usersList[curUserIndex].name} `,
     };
-    backToInitial();
-    if (onSelectUser) {
-      onSelectUser(selectedUser);
-    }
+    returnUserAndCorrectCursor(selectedUser);
   };
 
   useHotKeys('down', isTextBoxFocus, usersList, downForwardKey, [isTextBoxFocus]);
@@ -71,16 +86,13 @@ const NotifyPopup: React.FC<TProps> = (props) => {
     e.stopPropagation();
     const id = e.currentTarget.getAttribute('data-id')!;
     const avatar = e.currentTarget.querySelector('#avatar')!.getAttribute('src') || '';
-    const name = e.currentTarget.querySelector('#name')!.textContent || '';
+    const name = `${e.currentTarget.querySelector('#name')!.textContent} ` || '';
     const selectedUser: IUser = {
       id,
       avatar,
       name,
     };
-    backToInitial();
-    if (onSelectUser) {
-      onSelectUser(selectedUser);
-    }
+    returnUserAndCorrectCursor(selectedUser);
   };
 
   return (
