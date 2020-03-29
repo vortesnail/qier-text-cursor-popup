@@ -8,12 +8,12 @@ import './App.less';
 
 const usersLists = [
   {
-    id: 1,
+    id: '1',
     avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
     name: 'vortesnail',
   },
   {
-    id: 2,
+    id: '2',
     avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
     name: '那你的哟',
   },
@@ -52,18 +52,31 @@ const usersLists = [
     avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
     name: 'nananalala',
   },
-  // {
-  //   avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-  //   name: '爱的供养',
-  // },
-  // {
-  //   avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-  //   name: '爱的供养',
-  // },
-  // {
-  //   avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-  //   name: '爱的供养',
-  // },
+  {
+    id: 10,
+    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
+    name: '叮叮当当的笑爷爷',
+  },
+  {
+    id: 11,
+    avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
+    name: '自行车界离开家阿里事情',
+  },
+  {
+    id: 12,
+    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
+    name: '互不干扰的生活',
+  },
+  {
+    id: 13,
+    avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
+    name: '是吧',
+  },
+  {
+    id: 14,
+    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
+    name: 'nananalala',
+  },
 ];
 
 const App = () => {

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useHotKeys from './CustomHooks/useHotKeys';
 import { getCursorPosition } from './utils/util';
 import './NotifyPopup.less';
 
 type TProps = {
+  visible?: boolean;
   usersList?: IUser[];
   onSelectUser?: (selectedUser: IUser) => void;
   isTextBoxFocus: boolean;
@@ -17,7 +18,7 @@ export interface IUser {
 }
 
 const NotifyPopup: React.FC<TProps> = (props) => {
-  const { usersList = [{ id: 0 }], onSelectUser, isTextBoxFocus, textBoxEle } = props;
+  const { visible = true, usersList = [{ id: 0 }], onSelectUser, isTextBoxFocus, textBoxEle } = props;
   const [curUserId, setCurUserId] = useState<number | string | undefined>(usersList[0].id);
   let curUserIndex = 0;
 
@@ -108,23 +109,25 @@ const NotifyPopup: React.FC<TProps> = (props) => {
   };
 
   return (
-    <div className={`qier-notify-popup ${isTextBoxFocus ? 'show' : ''}`}>
+    <div className={`qier-notify-popup ${isTextBoxFocus && visible ? 'show' : ''}`}>
       <div className='popup'>
-        {usersList.map((item) => (
-          <div
-            key={item.id}
-            data-id={item.id}
-            className={`user ${item.id === curUserId ? 'active' : ''}`}
-            onMouseDown={handleUserSelect}
-          >
-            <div className='avatar'>
-              <img src={item.avatar} id='avatar' alt='avatar' />
+        <div>
+          {usersList.map((item) => (
+            <div
+              key={item.id}
+              data-id={item.id}
+              className={`user ${item.id === curUserId ? 'active' : ''}`}
+              onMouseDown={handleUserSelect}
+            >
+              <div className='avatar'>
+                <img src={item.avatar} id='avatar' alt='avatar' />
+              </div>
+              <div className='name' id='name'>
+                {item.name}
+              </div>
             </div>
-            <div className='name' id='name'>
-              {item.name}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -19,7 +19,16 @@ interface IProps {
 }
 
 const QierTextCursorPopup: React.FC<IProps> = (props) => {
-  const { moveDuration = 0.1, xOffset = 0, yOffset = 0, usersList = [], onSelectUser, render, children } = props;
+  const {
+    visible = true,
+    moveDuration = 0.1,
+    xOffset = 0,
+    yOffset = 0,
+    usersList = [],
+    onSelectUser,
+    render,
+    children,
+  } = props;
   const [textBoxEle, setTextBoxEle] = useState<HTMLInputElement | HTMLDivElement | HTMLTextAreaElement | null>(null);
   const [isTextBoxFocus, setIsTextBoxFocus] = useState<boolean>(false);
   const qierTextCursorPopupRef = useRef(null);
@@ -106,6 +115,7 @@ const QierTextCursorPopup: React.FC<IProps> = (props) => {
     if (usersList && usersList.length !== 0) {
       return (
         <NotifyPopup
+          visible={visible}
           usersList={usersList}
           onSelectUser={onSelectUser}
           isTextBoxFocus={isTextBoxFocus}
