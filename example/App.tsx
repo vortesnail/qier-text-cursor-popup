@@ -4,6 +4,7 @@ import { Input } from 'antd';
 import 'antd/dist/antd.css';
 import { IUser } from '../src/NotifyPopup';
 import QierTextCursorPopup, { getCursorPosition, insertStr } from '../src';
+import './App.less';
 
 const usersLists = [
   {
@@ -26,31 +27,31 @@ const usersLists = [
     avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
     name: '我好痒哦哦哦',
   },
-  // {
-  //   id: 5,
-  //   avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-  //   name: '叮叮当当的笑爷爷',
-  // },
-  // {
-  //   id: 6,
-  //   avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-  //   name: '自行车界离开家阿里事情',
-  // },
-  // {
-  //   id: 7,
-  //   avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-  //   name: '互不干扰的生活',
-  // },
-  // {
-  //   id: 8,
-  //   avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
-  //   name: '是吧',
-  // },
-  // {
-  //   id: 9,
-  //   avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
-  //   name: 'nananalala',
-  // },
+  {
+    id: 5,
+    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
+    name: '叮叮当当的笑爷爷',
+  },
+  {
+    id: 6,
+    avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
+    name: '自行车界离开家阿里事情',
+  },
+  {
+    id: 7,
+    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
+    name: '互不干扰的生活',
+  },
+  {
+    id: 8,
+    avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
+    name: '是吧',
+  },
+  {
+    id: 9,
+    avatar: 'http://img2.imgtn.bdimg.com/it/u=23084897,262291329&fm=11&gp=0.jpg',
+    name: 'nananalala',
+  },
   // {
   //   avatar: 'http://img4.imgtn.bdimg.com/it/u=2436369410,2358044874&fm=11&gp=0.jpg',
   //   name: '爱的供养',
@@ -74,6 +75,7 @@ const App = () => {
     setValue((tempValue: string) => {
       let resultStr = '';
       if (selectedUser.name) {
+        console.log(selectedUser.name);
         resultStr = insertStr(tempValue, cursorPos, selectedUser.name);
       } else {
         resultStr = tempValue;
@@ -99,9 +101,10 @@ const App = () => {
       <QierTextCursorPopup usersList={usersList} onSelectUser={onSelectUser}>
         <div className='test'>
           {' '}
-          {/* <textarea id='textareaId' value={value} onChange={onInputChange} /> */}
+          <textarea id='textareaId' value={value} onChange={onInputChange} />
           {/* <input type='text' name='app-input' id='textareaId' value={value} onChange={onInputChange} /> */}
-          <Input value={value} onChange={onInputChange} />
+          {/* <div contentEditable id='textareaId' ref={divEditableRef} /> */}
+          {/* <Input value={value} onChange={onInputChange} /> */}
         </div>
       </QierTextCursorPopup>
     </div>

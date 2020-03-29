@@ -13,8 +13,8 @@ export default function useHotkeys(
 ) {
   useEffect(() => {
     hotkeys.filter = function(e) {
-      const { tagName } = (e.target as any) || (e.srcElement as any);
-      return tagName.isContentEditable || tagName === 'INPUT' || tagName === 'TEXTAREA';
+      const { nodeName } = (e.target as any) || (e.srcElement as any);
+      return (e.target as HTMLDivElement).isContentEditable || nodeName === 'INPUT' || nodeName === 'TEXTAREA';
     };
 
     if (isTextBoxFocus && usersList.length !== 0) {

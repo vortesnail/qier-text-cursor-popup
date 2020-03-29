@@ -9,26 +9,155 @@ export function insertStr(soure: string, start: number, newStr: string) {
 // get current cursor position, it returns a integer
 export function getCursorPosition(obj: HTMLInputElement | HTMLTextAreaElement | HTMLDivElement) {
   let cursorIndex = 0;
-  if (obj.tagName === 'INPUT' || obj.tagName === 'TEXTAREA') {
+  if (obj.nodeName === 'INPUT' || obj.nodeName === 'TEXTAREA') {
     cursorIndex = (obj as HTMLInputElement | HTMLTextAreaElement).selectionStart || 0;
   }
-  if (obj.tagName === 'isContentEditable') {
-    // todo...
+  if ((obj as HTMLDivElement).isContentEditable) {
+    let range = null;
+    let selection = null;
+    selection = document.getSelection();
+    if (selection && selection.getRangeAt && selection.rangeCount) {
+      range = document.getSelection()!.getRangeAt(0);
+    }
+    cursorIndex = range?.startOffset || 0;
   }
   return cursorIndex;
 }
 
-// 获取光标位置
-// export function getCurrentRange() {
-//   let range = null;
-//   let selection = null;
-//   if (isSupportRange()) {
-//     selection = document.getSelection();
-//     if (selection.getRangeAt && selection.rangeCount) {
-//       range = document.getSelection().getRangeAt(0);
-//     }
-//   } else {
-//     range = document.selection.createRange();
-//   }
-//   return range;
-// }
+const properties = [
+  'direction', // RTL support
+  'boxSizing',
+  'width', // on Chrome and IE, exclude the scrollbar, so the mirror div wraps exactly as the textarea does
+  'height',
+  'overflowX',
+  'overflowY', // copy the scrollbar for IE
+
+  'borderTopWidth',
+  'borderRightWidth',
+  'borderBottomWidth',
+  'borderLeftWidth',
+  'borderStyle',
+
+  'paddingTop',
+  'paddingRight',
+  'paddingBottom',
+  'paddingLeft',
+
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/font
+  'fontStyle',
+  'fontVariant',
+  'fontWeight',
+  'fontStretch',
+  'fontSize',
+  'fontSizeAdjust',
+  'lineHeight',
+  'fontFamily',
+
+  'textAlign',
+  'textTransform',
+  'textIndent',
+  'textDecoration', // might not make a difference, but better be safe
+
+  'letterSpacing',
+  'wordSpacing',
+
+  'tabSize',
+  'MozTabSize',
+];
+
+const isBrowser = typeof window !== 'undefined';
+
+export function getCaretCoordinates(
+  element: HTMLInputElement | HTMLTextAreaElement | HTMLDivElement,
+  position: number,
+) {
+  if (!isBrowser) {
+    throw new Error('textarea-caret-position#getCaretCoordinates should only be called in a browser');
+  }
+
+  // The mirror div will replicate the textarea's style
+  const div = document.createElement('div');
+  div.id = 'input-textarea-contentEditableDiv-caret-position-mirror-div';
+  document.body.append(div);
+
+  const { style } = div;
+  const computed = window.getComputedStyle && window.getComputedStyle(element);
+  const isInput = element.nodeName === 'INPUT';
+
+  // Default textarea styles
+  style.whiteSpace = 'pre-wrap';
+  if (!isInput) {
+    style.wordWrap = 'break-word';
+  } // only for textarea-s
+
+  // Position off-screen
+  style.position = 'absolute'; // required to return coordinates properly
+
+  // Transfer the element's properties to the div
+  properties.forEach((prop: any) => {
+    if (isInput && prop === 'lineHeight') {
+      // Special case for <input>s because text is rendered centered and line height may be != height
+      if (computed.boxSizing === 'border-box') {
+        const height = Number.parseInt(computed.height, 10);
+        const outerHeight =
+          Number.parseInt(computed.paddingTop, 10) +
+          Number.parseInt(computed.paddingBottom, 10) +
+          Number.parseInt(computed.borderTopWidth, 10) +
+          Number.parseInt(computed.borderBottomWidth, 10);
+        const targetHeight = outerHeight + Number.parseInt(computed.lineHeight, 10);
+        if (height > targetHeight) {
+          style.lineHeight = `${height - outerHeight}px`;
+        } else if (height === targetHeight) {
+          style.lineHeight = computed.lineHeight;
+        } else {
+          style.lineHeight = '0';
+        }
+      } else {
+        style.lineHeight = computed.height;
+      }
+    } else {
+      style[prop] = computed[prop];
+    }
+  });
+
+  if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
+    // eslint-disable-next-line unicorn/prefer-text-content
+    div.textContent = (element as HTMLInputElement | HTMLTextAreaElement).value.slice(0, Math.max(0, position));
+  }
+  if (element.isContentEditable) {
+    // eslint-disable-next-line unicorn/prefer-text-content
+    div.textContent = (element as HTMLDivElement).innerText.slice(0, Math.max(0, position));
+  }
+
+  // The second special handling for input type="text" vs textarea:
+  // spaces need to be replaced with non-breaking spaces - http://stackoverflow.com/a/13402035/1269037
+  if (isInput) {
+    div.textContent = div.textContent!.replace(/\s/g, '\u00A0');
+  }
+
+  const span = document.createElement('span');
+  // Wrapping must be replicated *exactly*, including when a long word gets
+  // onto the next line, with whitespace at the end of the line before (#7).
+  // The  *only* reliable way to do that is to copy the *entire* rest of the
+  // textarea's content into the <span> created at the caret position.
+  // For inputs, just '.' would be enough, but no need to bother.
+  if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
+    // eslint-disable-next-line unicorn/prefer-text-content
+    span.textContent = (element as HTMLInputElement | HTMLTextAreaElement).value.slice(Math.max(0, position)) || '.'; // || because a completely empty faux span doesn't render at all
+  }
+  if (element.isContentEditable) {
+    // eslint-disable-next-line unicorn/prefer-text-content
+    span.textContent = (element as HTMLDivElement).innerText.slice(Math.max(0, position)) || '.'; // || because a completely empty faux span doesn't render at all
+  }
+  div.appendChild(span);
+
+  const coordinates = {
+    top: span.offsetTop + Number.parseInt(computed.borderTopWidth, 10),
+    left: span.offsetLeft + Number.parseInt(computed.borderLeftWidth, 10),
+    height: Number.parseInt(computed.lineHeight, 10),
+  };
+
+  document.body.removeChild(div);
+
+  return coordinates;
+}

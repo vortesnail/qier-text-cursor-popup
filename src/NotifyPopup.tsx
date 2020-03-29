@@ -39,7 +39,7 @@ const NotifyPopup: React.FC<TProps> = (props) => {
     }
 
     if (textBoxEle) {
-      if (textBoxEle.tagName === 'INPUT' || textBoxEle.tagName === 'TEXTAREA') {
+      if (textBoxEle.nodeName === 'INPUT' || textBoxEle.nodeName === 'TEXTAREA') {
         const timer2 = setTimeout(() => {
           (textBoxEle as HTMLInputElement | HTMLTextAreaElement).setSelectionRange(cursorPos, cursorPos);
           clearTimeout(timer2);
@@ -56,6 +56,13 @@ const NotifyPopup: React.FC<TProps> = (props) => {
       curUserIndex++;
     }
     setCurUserId(usersList[curUserIndex].id);
+    const popEle = document.querySelector('.qier-notify-popup')!.querySelector('.popup');
+    const curUserEle = popEle!.querySelectorAll('.user')![curUserIndex];
+    const off =
+      (curUserEle as HTMLDivElement).offsetTop +
+      (curUserEle as HTMLDivElement).offsetHeight -
+      (popEle as HTMLDivElement).offsetHeight;
+    popEle!.scrollTop = off + 2;
   };
 
   const upForwardKey = (e: KeyboardEvent): void => {
@@ -66,6 +73,11 @@ const NotifyPopup: React.FC<TProps> = (props) => {
       curUserIndex--;
     }
     setCurUserId(usersList[curUserIndex].id);
+    const popEle = document.querySelector('.qier-notify-popup')!.querySelector('.popup');
+    const curUserEle = popEle!.querySelectorAll('.user')![curUserIndex];
+    const off =
+      popEle!.scrollHeight - (curUserEle as HTMLDivElement).offsetTop - (popEle as HTMLDivElement).offsetHeight;
+    popEle!.scrollTop = popEle!.scrollTop - off - 2;
   };
 
   const enterKey = (e: KeyboardEvent): void => {

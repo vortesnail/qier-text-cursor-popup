@@ -73,6 +73,8 @@ module.exports = {
       },
     ],
     'unicorn/no-process-exit': OFF,
+    'unicorn/prefer-node-append': OFF,
+    'unicorn/prefer-node-remove': OFF,
 
     '@typescript-eslint/explicit-function-return-type': OFF,
     '@typescript-eslint/no-explicit-any': OFF,
