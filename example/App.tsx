@@ -75,7 +75,6 @@ const App = () => {
     setValue((tempValue: string) => {
       let resultStr = '';
       if (selectedUser.name) {
-        console.log(selectedUser.name);
         resultStr = insertStr(tempValue, cursorPos, selectedUser.name);
       } else {
         resultStr = tempValue;

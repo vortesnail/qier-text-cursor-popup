@@ -1,0 +1,17 @@
+/.vscode
+/scripts
+/example
+/node_modules
+/src
+.babelrc
+.commitlintrc.js
+.editorconfig
+.eslintignore
+.eslintrc.js
+.npmignore
+.npmrc
+.nvmrc
+.prettierignore
+.prettierrc
+.stylelintrc.json
+postcss.config.js

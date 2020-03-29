@@ -1,13 +1,21 @@
 {
-  "name": "qier-moving-notify",
-  "version": "1.0.0",
-  "description": "A moving notify",
+  "name": "qier-text-cursor-popup",
+  "version": "1.0.2",
+  "description": "A smart text cursor popup",
   "main": "./dist/index.js",
   "types": "./dist",
   "repository": {
     "type": "git",
     "url": "git@github.com:vortesnail/qier-moving-notify.git"
   },
+  "keywords": [
+    "caret",
+    "cursor-popup",
+    "text-cursor-popup",
+    "notify-popup",
+    "notify",
+    "qier-text-cursor-popup"
+  ],
   "author": {
     "name": "vortesnail",
     "url": "https://github.com/vortesnail",
