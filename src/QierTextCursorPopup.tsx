@@ -4,15 +4,10 @@ import { getCursorPosition, getCaretCoordinates } from './utils/util';
 import './QierTextCursorPopup.less';
 
 interface IProps {
-  // defaultVisible?: boolean;
   visible?: boolean;
   moveDuration?: number;
   xOffset?: number;
   yOffset?: number;
-  // showDelay?: number;
-  // disappearDelay?: number;
-  // debounce?: boolean;
-  // getPopupContainer?: (triggerNode: HTMLElement) => HTMLElement;
   usersList?: IUser[];
   onSelectUser?: (selectedUser: IUser) => void;
   render?: () => React.ReactNode;
@@ -69,7 +64,7 @@ const QierTextCursorPopup: React.FC<IProps> = (props) => {
     moveTextBox(0);
   });
 
-  const handleTextBoxChange = (e: any) => {
+  const handleTextBoxChange = () => {
     moveTextBox(moveDuration);
   };
 
